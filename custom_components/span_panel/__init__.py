@@ -39,6 +39,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     _LOGGER.debug("ASYNC_SETUP_ENTRY %s" % host)
 
+    if DOMAIN not in entry.options:
+        options = dict(entry.options)
+        options.setdefault(DOMAIN, {})
+        hass.config_entries.async_update_entry(entry, options=options)
+
     span_panel = SpanPanel(
         config[CONF_HOST],
         entry.options,
