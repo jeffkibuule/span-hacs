@@ -20,7 +20,6 @@ from homeassistant.util.network import is_ipv4_address
 from .const import (
     DOMAIN,
     CONF_ACCESS_TOKEN,
-    DEFAULT_ACCESS_TOKEN,
 )
 
 _LOGGER = logging.getLogger(__name__)
