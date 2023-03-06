@@ -33,10 +33,12 @@ class SpanPanel:
     def __init__(
         self,
         host,
+        options=None,
         async_client=None,
     ):
         """Init the SPAN."""
         self.host = host.lower()
+        self.options = options
         self.serial_number = None
         self.status_results = None
         self.circuits = SpanPanelCircuits(self)

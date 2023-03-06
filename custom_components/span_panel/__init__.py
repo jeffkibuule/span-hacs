@@ -41,6 +41,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     span_panel = SpanPanel(
         config[CONF_HOST],
+        entry.options,
         async_client=get_async_client(hass),
     )
 
