@@ -12,6 +12,7 @@ from homeassistant import config_entries
 from homeassistant.components import zeroconf
 from homeassistant.const import CONF_HOST
 from homeassistant.core import HomeAssistant
+from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.httpx_client import get_async_client
