@@ -23,6 +23,7 @@ SYSTEM_CELLULAR_LINK = "wwanLink"
 SYSTEM_WIFI_LINK = "wlanLink"
 
 from .const import (
+    DOMAIN,
     CONF_ACCESS_TOKEN,
     DEFAULT_ACCESS_TOKEN,
 )
@@ -71,10 +72,7 @@ class SpanPanel:
             )
             try:
                 async with self.async_client as client:
-                    access_token = self._person.config_entry.options.get(
-                        CONF_ACCESS_TOKEN, DEFAULT_CONF_ACCESS_TOKEN
-                    )
-                    headers = { 'accessToken': access_token }
+                    headers = { 'accessToken': self.option_monitored_users }
                     resp = await client.get(url, timeout=30, headers=headers, **kwargs
                     )
                     _LOGGER.debug("Fetched from %s: %s: %s", url, resp, resp.text)
@@ -87,15 +85,17 @@ class SpanPanel:
         _LOGGER.debug("HTTP POST Attempt: %s", url)
         try:
             async with self.async_client as client:
-                access_token = self._person.config_entry.options.get(
-                    CONF_ACCESS_TOKEN, DEFAULT_CONF_ACCESS_TOKEN
-                )
-                headers = { 'accessToken': access_token }
+                headers = { 'accessToken': self.option_monitored_users }
                 resp = await client.post(url, json=json, headers=headers, timeout=30, **kwargs)
                 _LOGGER.debug("HTTP POST %s: %s: %s", url, resp, resp.text)
                 return resp
         except httpx.TransportError:  # pylint: disable=try-except-raise
             raise
+
+    @property
+    def option_access_token(self):
+        """Return string of access token option."""
+        return self.options[DOMAIN].get(CONF_ACCESS_TOKEN, "")
 
     async def getData(self, url):
         """Fetch data from the endpoint and if inverters selected default"""
