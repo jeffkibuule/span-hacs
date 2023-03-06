@@ -25,7 +25,6 @@ SYSTEM_WIFI_LINK = "wlanLink"
 from .const import (
     DOMAIN,
     CONF_ACCESS_TOKEN,
-    DEFAULT_ACCESS_TOKEN,
 )
 
 class SpanPanel:
