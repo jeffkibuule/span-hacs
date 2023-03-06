@@ -158,7 +158,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             {
                 vol.Optional(
                     CONF_ACCESS_TOKEN,
-                    default=self.span_panel.option_access_token,
+                    default=self.options[DOMAIN].get(CONF_ACCESS_TOKEN, ""),
                 ): str
             }
         )
