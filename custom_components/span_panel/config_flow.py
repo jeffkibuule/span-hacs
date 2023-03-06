@@ -55,6 +55,14 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
+    @staticmethod
+    @callback
+    def async_get_options_flow(
+        config_entry: config_entries.ConfigEntry,
+    ) -> SpanOptionsFlowHandler:
+        """Get the options flow for this handler."""
+        return SpanOptionsFlowHandler(config_entry)
+
     def __init__(self):
         """Initialize an Span Panel flow."""
         self.host: str | None = None
@@ -142,16 +150,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
         )
-        
-    @staticmethod
-    @callback
-    def async_get_options_flow(
-        config_entry: config_entries.ConfigEntry,
-    ) -> OptionsFlowHandler:
-        """Get the options flow for this handler."""
-        return OptionsFlowHandler(config_entry)
 
-class OptionsFlowHandler(config_entries.OptionsFlow):
+class SpanOptionsFlowHandler(config_entries.OptionsFlow):
     """Handle a option flow for Span Panel."""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
