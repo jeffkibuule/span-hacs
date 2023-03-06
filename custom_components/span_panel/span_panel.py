@@ -71,7 +71,7 @@ class SpanPanel:
             )
             try:
                 async with self.async_client as client:
-                    headers = { 'accessToken': self.option_monitored_users }
+                    headers = { 'accessToken': self.option_access_token }
                     resp = await client.get(url, timeout=30, headers=headers, **kwargs
                     )
                     _LOGGER.debug("Fetched from %s: %s: %s", url, resp, resp.text)
@@ -84,7 +84,7 @@ class SpanPanel:
         _LOGGER.debug("HTTP POST Attempt: %s", url)
         try:
             async with self.async_client as client:
-                headers = { 'accessToken': self.option_monitored_users }
+                headers = { 'accessToken': self.option_access_token }
                 resp = await client.post(url, json=json, headers=headers, timeout=30, **kwargs)
                 _LOGGER.debug("HTTP POST %s: %s: %s", url, resp, resp.text)
                 return resp
