@@ -141,6 +141,14 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
         )
+        
+    @staticmethod
+    @callback
+    def async_get_options_flow(
+        config_entry: config_entries.ConfigEntry,
+    ) -> OptionsFlowHandler:
+        """Get the options flow for this handler."""
+        return OptionsFlowHandler(config_entry)
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
     """Handle a option flow for Span Panel."""
@@ -158,7 +166,9 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             {
                 vol.Optional(
                     CONF_ACCESS_TOKEN,
-                    default=self.config_entry[DOMAIN].get(CONF_ACCESS_TOKEN, ""),
+                    default=self.config_entry.options.get(
+                        CONF_ACCESS_TOKEN, ""
+                        ),
                 ): str
             }
         )
