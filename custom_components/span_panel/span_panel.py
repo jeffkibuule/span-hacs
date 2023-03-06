@@ -12,7 +12,6 @@ PANEL_URL = "http://{}/api/v1/panel"
 
 _LOGGER = logging.getLogger(__name__)
 
-
 SPAN_CIRCUITS = "circuits"
 SPAN_SYSTEM = "system"
 PANEL_POWER = "instantGridPowerW"
@@ -22,6 +21,11 @@ SYSTEM_DOOR_STATE_OPEN = "OPEN"
 SYSTEM_ETHERNET_LINK = "eth0Link"
 SYSTEM_CELLULAR_LINK = "wwanLink"
 SYSTEM_WIFI_LINK = "wlanLink"
+
+from .const import (
+    CONF_ACCESS_TOKEN,
+    DEFAULT_ACCESS_TOKEN,
+)
 
 class SpanPanel:
     """Instance of a Span panel"""
@@ -67,7 +71,11 @@ class SpanPanel:
             )
             try:
                 async with self.async_client as client:
-                    resp = await client.get(url, timeout=30, **kwargs
+                    access_token = self._person.config_entry.options.get(
+                        CONF_ACCESS_TOKEN, DEFAULT_CONF_ACCESS_TOKEN
+                    )
+                    headers = { 'accessToken': access_token }
+                    resp = await client.get(url, timeout=30, headers=headers, **kwargs
                     )
                     _LOGGER.debug("Fetched from %s: %s: %s", url, resp, resp.text)
                     return resp
@@ -79,7 +87,11 @@ class SpanPanel:
         _LOGGER.debug("HTTP POST Attempt: %s", url)
         try:
             async with self.async_client as client:
-                resp = await client.post(url, json=json, timeout=30, **kwargs)
+                access_token = self._person.config_entry.options.get(
+                    CONF_ACCESS_TOKEN, DEFAULT_CONF_ACCESS_TOKEN
+                )
+                headers = { 'accessToken': access_token }
+                resp = await client.post(url, json=json, headers=headers, timeout=30, **kwargs)
                 _LOGGER.debug("HTTP POST %s: %s: %s", url, resp, resp.text)
                 return resp
         except httpx.TransportError:  # pylint: disable=try-except-raise
